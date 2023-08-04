@@ -4,11 +4,17 @@
 
 BluetoothSerial BT;
 
-bool i = false;
-int modo;
-String incoming;
+class modo_y_reconectar {
+  private:
+    bool i = false;
+    int modo;
+    String incoming;
+  public:
+    void bt_reconnect();
+    void mode_selection();
+};
 
-void bt_reconnect() {
+void modo_y_reconectar :: bt_reconnect() {
   while (!BT.connected()) {
     if (DEBUG) {
       Serial.println("Conectando blutu..");
@@ -22,7 +28,7 @@ void bt_reconnect() {
   }
 }
 
-void mode_selection() {
+void modo_y_reconectar :: mode_selection() {
   if (BT.connected()) {
     while (i == false) {
       if (BT.available()) {
@@ -89,13 +95,18 @@ void mode_selection() {
   }
 }
 
+modo_y_reconectar BT2;
+
 void setup() {
   Serial.begin(115200);
   BT.begin("123456");
   if (DEBUG) Serial.println("Bluetooth iniciado");
 
-  bt_reconnect();
-  mode_selection();
+  //bt_reconnect();
+  //mode_selection();
+
+  BT2.bt_reconnect();
+  BT2.mode_selection();
 }
 
 void loop() {
