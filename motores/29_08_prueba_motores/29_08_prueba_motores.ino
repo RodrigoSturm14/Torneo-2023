@@ -86,5 +86,10 @@ void loop() {
   delay(2000);
 
   motor(LEFT, BACKWARD, 100);
-  motor(RIGHT, FORDWARD, 100);
+  motor(RIGHT, FORWARD, 100);
+  delay(5000);
+
+  motor(LEFT, FORWARD, 0);
+  motor(RIGHT, FORWARD, 0);
+  delay(2000);
 }
