@@ -1,11 +1,3 @@
-/*
-#define LEFT 1
-#define RIGHT 0
-
-#define BACKWARD 0
-#define FORWARD 1
-*/
-
 // CHANNELS
 #define CH_LEFT_1 12
 #define CH_LEFT_2 11
@@ -20,11 +12,9 @@
 #define M2A 22
 #define M2B 23
 
-// const int FRECUENCIA = 1000; /* 1 KHz */
-// const int RESOLUCION = 8;
-
 class Motor {
 private:
+  // atributos/variables usados por los metodos/funciones de la clase
   int pin_1;
   int pin_2;
   int ch_1;
@@ -33,14 +23,15 @@ private:
   int resolucion = 8;
 
 public:
+  // metodos/funciones
   Motor(int pin_a, int pin_b, int ch_a, int ch_b);
   void Forward(int vel);
   void Backward(int vel);
   void Stop();
 };
 
-// constructor
-Motor::Motor(int pin_a, int pin_b, int ch_a, int ch_b){
+// funcion constructor de ambos motores; funcion para setear y agregar los parametros (pines y chnls) de los motores en la creacion de objetos
+Motor::Motor(int pin_a, int pin_b, int ch_a, int ch_b) {
   pin_1 = pin_a;
   pin_2 = pin_b;
   ch_1 = ch_a;
@@ -56,125 +47,53 @@ Motor::Motor(int pin_a, int pin_b, int ch_a, int ch_b){
   pinMode(pin_2, OUTPUT);
 }
 
-void Motor::Forward(int vel){
+void Motor::Forward(int vel) {
   ledcWrite(ch_1, vel);
   ledcWrite(ch_2, 0);
 }
 
-void Motor::Backward(int vel){
+void Motor::Backward(int vel) {
   ledcWrite(ch_1, 0);
   ledcWrite(ch_2, vel);
 }
 
-void Motor::Stop(){
+void Motor::Stop() {
   ledcWrite(ch_1, 0);
   ledcWrite(ch_2, 0);
 }
 
+// crear objeto motor derecho e izquierdo con sus pines y chnls, con la funcion constructor
 Motor *rightmotor = new Motor(M1A, M1B, CH_RIGHT_1, CH_RIGHT_2);
 Motor *leftmotor = new Motor(M2A, M2B, CH_LEFT_1, CH_LEFT_2);
 
-/*
-void motor(int motor, int direccion, int velocidad) {
-
-  if (motor == LEFT) {
-    if (direccion == 1) {
-      ledcWrite(CH_LEFT_1, velocidad);
-      ledcWrite(CH_LEFT_2, 0);
-      Serial.println("motor izquierdo adelante");
-    } else {
-      ledcWrite(CH_LEFT_1, 0);
-      ledcWrite(CH_LEFT_2, velocidad);
-      Serial.println("motor izquierdo atras");
-    }
-
-  }
-
-  else if (motor == RIGHT) {
-    if (direccion == 1) {
-      ledcWrite(CH_RIGHT_1, velocidad);
-      ledcWrite(CH_RIGHT_2, 0);
-      Serial.println("motor derecho adelante");
-    } else {
-      ledcWrite(CH_RIGHT_1, 0);
-      ledcWrite(CH_RIGHT_2, velocidad);
-      Serial.println("motor derecho atras");
-    }
-  }
-}
-
-void pines_setup() {
-  ledcSetup(CH_LEFT_1, frequencia, resolucion);
-  ledcSetup(CH_LEFT_2, frequencia, resolucion);
-  ledcSetup(CH_RIGHT_1, frequencia, resolucion);
-  ledcSetup(CH_RIGHT_2, frequencia, resolucion);
-
-  ledcAttachPin(M1A, CH_LEFT_1);
-  ledcAttachPin(M1B, CH_LEFT_2);
-  ledcAttachPin(M2A, CH_RIGHT_1);
-  ledcAttachPin(M2B, CH_RIGHT_2);
-
-  pinMode(M1A, OUTPUT);
-  pinMode(M1B, OUTPUT);
-  pinMode(M2A, OUTPUT);
-  pinMode(M2B, OUTPUT);
-}
-*/
 void setup() {
 
-  Serial.begin(115200);
-  // pines_setup();
+  while (true) {
+    rightmotor->Forward(100);
+    leftmotor->Forward(100);
+    delay(5000);
+
+    rightmotor->Stop();
+    leftmotor->Stop();
+    delay(2000);
+
+    rightmotor->Backward(100);
+    leftmotor->Backward(100);
+    delay(5000);
+
+    rightmotor->Stop();
+    leftmotor->Stop();
+    delay(2000);
+
+    rightmotor->Forward(100);
+    leftmotor->Backward(120);
+    delay(5000);
+
+    rightmotor->Stop();
+    leftmotor->Stop();
+    delay(2000);
+  }
 }
 
 void loop() {
-
-  /*
-  motor(LEFT, FORWARD, 100);
-  motor(RIGHT, FORWARD, 100);
-  delay(5000);
-
-  motor(LEFT, FORWARD, 0);
-  motor(RIGHT, FORWARD, 0);
-  delay(2000);
-
-  motor(LEFT, BACKWARD, 100);
-  motor(RIGHT, BACKWARD, 100);
-  delay(5000);
-
-  motor(LEFT, FORWARD, 0);
-  motor(RIGHT, FORWARD, 0);
-  delay(2000);
-
-  motor(LEFT, BACKWARD, 100);
-  motor(RIGHT, FORWARD, 100);
-  delay(5000);
-
-  motor(LEFT, FORWARD, 0);
-  motor(RIGHT, FORWARD, 0);
-  delay(2000);
-  */
-
-  rightmotor->Forward(100);
-  leftmotor->Forward(100);
-  delay(5000);
-
-  rightmotor->Stop();
-  leftmotor->Stop();
-  delay(2000);
-
-  rightmotor->Backward(100);
-  leftmotor->Backward(100);
-  delay(5000);
-
-  rightmotor->Stop();
-  leftmotor->Stop();
-  delay(2000);
-
-  rightmotor->Forward(100);
-  leftmotor->Backward(120);
-  delay(5000);
-
-  rightmotor->Stop();
-  leftmotor->Stop();
-  delay(2000);
 }
