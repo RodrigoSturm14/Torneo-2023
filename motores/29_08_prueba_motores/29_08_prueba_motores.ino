@@ -59,6 +59,11 @@ void pines_setup() {
   ledcAttachPin(M1B, CH_LEFT_2);
   ledcAttachPin(M2A, CH_RIGHT_1);
   ledcAttachPin(M2B, CH_RIGHT_2);
+
+  pinMode(M1A, OUTPUT);
+  pinMode(M1B, OUTPUT);
+  pinMode(M2A, OUTPUT);
+  pinMode(M2B, OUTPUT);
 }
 
 void setup() {
