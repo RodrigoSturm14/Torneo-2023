@@ -9,8 +9,8 @@
 #define M1B 21
 
 // RIGHT
-#define M2A 22
-#define M2B 23
+#define M2A 23
+#define M2B 22
 
 class Motor {
 private:
@@ -42,19 +42,16 @@ Motor::Motor(int pin_a, int pin_b, int ch_a, int ch_b) {
 
   ledcAttachPin(pin_1, ch_1);
   ledcAttachPin(pin_2, ch_2);
-
-  pinMode(pin_1, OUTPUT);
-  pinMode(pin_2, OUTPUT);
 }
 
 void Motor::Forward(int vel) {
-  ledcWrite(ch_1, vel);
-  ledcWrite(ch_2, 0);
+  ledcWrite(ch_2, vel);
+  ledcWrite(ch_1, 0);
 }
 
 void Motor::Backward(int vel) {
-  ledcWrite(ch_1, 0);
-  ledcWrite(ch_2, vel);
+  ledcWrite(ch_2, 0);
+  ledcWrite(ch_1, vel);
 }
 
 void Motor::Stop() {
@@ -67,33 +64,20 @@ Motor *rightmotor = new Motor(M1A, M1B, CH_RIGHT_1, CH_RIGHT_2);
 Motor *leftmotor = new Motor(M2A, M2B, CH_LEFT_1, CH_LEFT_2);
 
 void setup() {
-
-  while (true) {
-    rightmotor->Forward(100);
-    leftmotor->Forward(100);
-    delay(5000);
-
-    rightmotor->Stop();
-    leftmotor->Stop();
-    delay(2000);
-
-    rightmotor->Backward(100);
-    leftmotor->Backward(100);
-    delay(5000);
-
-    rightmotor->Stop();
-    leftmotor->Stop();
-    delay(2000);
-
-    rightmotor->Forward(100);
-    leftmotor->Backward(120);
-    delay(5000);
-
-    rightmotor->Stop();
-    leftmotor->Stop();
-    delay(2000);
-  }
+  Serial.begin(115200);
 }
 
 void loop() {
+
+  rightmotor->Forward(100);
+  leftmotor->Forward(100);
+  delay(4000);
+
+  rightmotor->Forward(150);
+  leftmotor->Forward(150);
+  delay(2000);
+
+  rightmotor->Stop();
+  leftmotor->Stop();
+  delay(2000);
 }
