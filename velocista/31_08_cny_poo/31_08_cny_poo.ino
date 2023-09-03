@@ -182,9 +182,10 @@ void setup() {
   }
 
   //calibrar lecturas minimas y maximas
+  Serial.println("Calibrando.. en while");
+
   while (boton_on_off() == true) {
-    Serial.println("Calibrando..");
-    delay(500);
+
     for (int i = 0; i < CNY_CANT; i++) {
 
       valor = analogRead(pines_CNY70[i]);
@@ -263,8 +264,8 @@ void loop() {
     valores_actuales[i] = constrain(valores_actuales[i], 0, 1000);
   }
 
-  // error = (-16 * valores_actuales[0]) + (-8 * valores_actuales[1]) + (-4 * valores_actuales[2]) + (-2 * valores_actuales[3]) + (2 * valores_actuales[4]) + (4 * valores_actuales[5]) + (8 * valores_actuales[6]) + (16 * valores_actuales[7]);
-  error = (-16 * valores_actuales[7]) + (-8 * valores_actuales[6]) + (-4 * valores_actuales[5]) + (-2 * valores_actuales[4]) + (2 * valores_actuales[3]) + (4 * valores_actuales[2]) + (8 * valores_actuales[1]) + (16 * valores_actuales[0]);
+  error = (-16 * valores_actuales[0]) + (-8 * valores_actuales[1]) + (-4 * valores_actuales[2]) + (-2 * valores_actuales[3]) + (2 * valores_actuales[4]) + (4 * valores_actuales[5]) + (8 * valores_actuales[6]) + (16 * valores_actuales[7]);
+  // error = (-16 * valores_actuales[7]) + (-8 * valores_actuales[6]) + (-4 * valores_actuales[5]) + (-2 * valores_actuales[4]) + (2 * valores_actuales[3]) + (4 * valores_actuales[2]) + (8 * valores_actuales[1]) + (16 * valores_actuales[0]);
 
   // 7-4 sensores derechos negativisados __ 3-0 sensores izquierdos positivos
 
@@ -298,32 +299,37 @@ void loop() {
     vel_der = VEL_MIN_PID + calc_p;
     vel_izq = VEL_MIN_PID - calc_p;
   }
+
+  Serial.println(vel_izq);
+  Serial.println(vel_der);
   //////////////////////////
 
   vel_der = constrain(vel_der, 0, 255);
   vel_izq = constrain(vel_izq, 0, 255);
+  if(vel_der > 255) vel_der = 255;
+  if(vel_izq > 255) vel_izq = 255;
 
   //////////////////////////
   if (all_white) {
 
-    if (black_side == LEFT) {
-      Serial.print("Motor derecho: Adelante - ");
-      Serial.println(VEL_WHITE_FLOOR);
+    if (black_side == RIGHT) {
+      // motor(LEFT, FORWARD, QUIETO);
+      leftmotor->Forward(0);
+      Serial.println("Motor izquierdo: Quieto - 0");
+
       // motor(RIGHT, FORWARD, VEL_WHITE_FLOOR);
       rightmotor->Forward(VEL_WHITE_FLOOR);
-      
-      Serial.println("Motor izquierdo: Quieto - 0");
-      // motor(LEFT, FORWARD, QUIETO);
-      leftmotor->Stop();
-    } else {
-      Serial.println("Motor derecho: Quieto - 0");
-      // motor(RIGHT, FORWARD, QUIETO);
-      rightmotor->Stop();
-      
-      Serial.print("Motor izquierdo: Adelante - ");
+      Serial.print("Motor derecho: Adelante - ");
       Serial.println(VEL_WHITE_FLOOR);
+    } else {
+      // motor(RIGHT, FORWARD, QUIETO);
+      rightmotor->Forward(0);
+      Serial.println("Motor derecho: Quieto - 0");
+
       // motor(LEFT, FORWARD, VEL_WHITE_FLOOR);
       leftmotor->Forward(VEL_WHITE_FLOOR);
+      Serial.print("Motor izquierdo: Adelante - ");
+      Serial.println(VEL_WHITE_FLOOR);
     }
   } else {
 
